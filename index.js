@@ -6,6 +6,7 @@ const PORT = process.env.PORT || 8000
 
 app.get('/', (req, res) => {
   console.log('Hello World2');
+  res.json("hello world2222")
 });
 
 app.listen(PORT, () => {
