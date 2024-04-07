@@ -1,19 +1,23 @@
-FROM node:13-slim
+# ใช้ node:latest เป็นฐานของ Docker image
+FROM node:latest
 
-RUN mkdir -p /home/node/app/node_modules && chown -R node:node /home/node/app
-
-WORKDIR /home/node/app
-
-COPY package*.json ./
-
-USER node
-
-RUN npm install
-
+# ติดตั้งแพ็คเกจ mysql2 โดยใช้ npm
 RUN npm install mysql2
 
-COPY --chown=node:node . .
+# สร้างโฟลเดอร์ app และตั้งค่าเป็นโฟลเดอร์ปัจจุบัน
+WORKDIR /app
 
-EXPOSE 8080
+# คัดลอกไฟล์ package.json และ package-lock.json ไปยังโฟลเดอร์ app
+COPY package*.json ./
 
-CMD [ "node", "index.js" ]
+# ติดตั้ง dependencies ของแอปพลิเคชัน
+RUN npm install
+
+# คัดลอกโค้ดของแอปพลิเคชันไปยังโฟลเดอร์ app
+COPY . .
+
+# แอพพลิเคชันจะทำงานที่พอร์ต 3000
+EXPOSE 3000
+
+# คำสั่งเริ่มต้นของแอพพลิเคชัน
+CMD ["node", "index.js"]
